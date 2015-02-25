@@ -15,6 +15,7 @@
 
 @property (weak, nonatomic) IBOutlet UIView *gameView;
 @property (strong, nonatomic) NSArray *matches;
+@property (nonatomic) BOOL isChanged;
 
 @end
 
@@ -26,15 +27,20 @@
     [super viewDidLoad];
     
     [self randomFillGrid];
-    [self drawGrid];
-    [self applyGameRules];
-    [self removeMatchesFromGame];
-    [self refillGrid];
-    
-    [self drawGrid];
+    [self start];
 }
 
 #pragma mark Private methods
+
+- (void)start {
+    [self drawGrid];
+    [self applyGameRules];
+    
+    if (self.isChanged) {
+        [self removeMatchesFromGame];
+        [self refillGrid];
+    }
+}
 
 - (void)randomFillGrid {
     for (int i = 0; i < self.gridController.numberOfColumns; i++) {
@@ -72,6 +78,8 @@
     for (NSArray *match in self.matches) {
         NSLog(@"match length: %lu", (unsigned long)[match count]);
     }
+    
+    self.isChanged = [self.matches count] > 0;
 }
 
 - (void)removeMatchesFromGame {
@@ -106,6 +114,8 @@
             }
         }
     }
+    
+    [self start];
 }
 
 #pragma mark Getters
