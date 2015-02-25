@@ -26,8 +26,9 @@
 #pragma mark Public
 
 - (void)addItem:(id)item column:(int)columnPosition row:(int)rowPosition {
-    if (![self.grid containsObject:item]) {
-        [[self.grid objectAtIndex:columnPosition] insertObject:item atIndex:rowPosition];
+    if (![self.items containsObject:item]) {
+        NSMutableArray *row = [self.grid objectAtIndex:columnPosition];
+        [row replaceObjectAtIndex:rowPosition withObject:item];
         [self.items addObject:item];
     }
 }
@@ -43,6 +44,10 @@
     }
     
     return nil;
+}
+
+- (id)itemAtPosition:(GridPositionModel *)position {
+    return [[self.grid objectAtIndex:position.columnIndex] objectAtIndex:position.rowIndex];
 }
 
 #pragma mark Private

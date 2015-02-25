@@ -24,8 +24,11 @@
 
 # pragma mark Items
 
+// all grid items flattened
 @property (strong, nonatomic) NSMutableArray *items;
+
 - (void)addItem:(id)item column:(int)columnPosition row:(int)rowPosition;
 - (GridPositionModel *)itemPosition:(id)item;
+- (id)itemAtPosition:(GridPositionModel *)position;
 
 @end

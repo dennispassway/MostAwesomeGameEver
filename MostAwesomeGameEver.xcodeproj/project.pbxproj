@@ -17,6 +17,7 @@
 		26E845591A92550300A0D57D /* MostAwesomeGameEverTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 26E845581A92550300A0D57D /* MostAwesomeGameEverTests.m */; };
 		26E8456A1A92582400A0D57D /* DiamondView.m in Sources */ = {isa = PBXBuildFile; fileRef = 26E845691A92582400A0D57D /* DiamondView.m */; };
 		26E845701A9259D700A0D57D /* GridController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26E8456F1A9259D700A0D57D /* GridController.m */; };
+		5FFE48D01A99FB6000DF2EDB /* Colors.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FFE48CF1A99FB6000DF2EDB /* Colors.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,8 @@
 		26E845691A92582400A0D57D /* DiamondView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiamondView.m; path = views/DiamondView.m; sourceTree = "<group>"; };
 		26E8456E1A9259D700A0D57D /* GridController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GridController.h; path = controllers/GridController.h; sourceTree = "<group>"; };
 		26E8456F1A9259D700A0D57D /* GridController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GridController.m; path = controllers/GridController.m; sourceTree = "<group>"; };
+		5FFE48CF1A99FB6000DF2EDB /* Colors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Colors.m; path = statics/Colors.m; sourceTree = "<group>"; };
+		5FFE48D11A99FB7500DF2EDB /* Colors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Colors.h; path = statics/Colors.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +157,8 @@
 		26E845641A92552000A0D57D /* statics */ = {
 			isa = PBXGroup;
 			children = (
+				5FFE48D11A99FB7500DF2EDB /* Colors.h */,
+				5FFE48CF1A99FB6000DF2EDB /* Colors.m */,
 			);
 			name = statics;
 			sourceTree = "<group>";
@@ -276,6 +281,7 @@
 			files = (
 				26E845451A92550300A0D57D /* GameViewController.m in Sources */,
 				26E845421A92550300A0D57D /* AppDelegate.m in Sources */,
+				5FFE48D01A99FB6000DF2EDB /* Colors.m in Sources */,
 				26E8453F1A92550300A0D57D /* main.m in Sources */,
 				26E8456A1A92582400A0D57D /* DiamondView.m in Sources */,
 				261266411A92771400EE3615 /* GridPositionModel.m in Sources */,
