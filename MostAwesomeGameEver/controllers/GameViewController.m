@@ -9,10 +9,12 @@
 #import "GameViewController.h"
 #import "GridPositionModel.h"
 #import "DiamondView.h"
+#import "GRLinearMatch.h"
 
 @interface GameViewController()
 
 @property (weak, nonatomic) IBOutlet UIView *gameView;
+@property (strong, nonatomic) NSArray *matches;
 
 @end
 
@@ -26,6 +28,8 @@
     [self randomFillGrid];
     [self drawGrid];
     [self applyGameRules];
+    [self removeMatchesFromGrid];
+    [self updateUI];
 }
 
 #pragma mark Private methods
@@ -58,112 +62,26 @@
 }
 
 - (void)applyGameRules {
-//    [self gameRuleTopToBottom];
-//    [self gameRuleLeftToRight];
-}
-
-- (void)gameRuleTopToBottom {
-    DiamondView *item;
-    int currentColorId = -1;
-    NSMutableArray *foundPattern = [[NSMutableArray alloc] init];
-    NSMutableArray *foundPatterns = [[NSMutableArray alloc] init];
+    GRLinearMatch *linearMatchRule = [[GRLinearMatch alloc] init];
+    self.matches = [linearMatchRule applyWithGrid:self.gridController];
     
-    // search pattern from top to bottom
-    for (int i = 0; i < self.gridController.numberOfColumns; i++) {
-        NSLog(@"NEW COLUMN: %d", i);
-        NSLog(@"-=-=-=-=-=-=-=-");
-        
-        for (int j = 0; j < self.gridController.numberOfRows; j++) {
-            NSLog(@"ROW INDEX %d", j);
-            item = [self.gridController itemAtPosition:[[GridPositionModel alloc] initWithColumnIndex:i rowIndex:j]];
-            
-            if (item.colorId == currentColorId) {
-//                NSLog(@"match: %d, %d", item.colorId, currentColorId);
-                [foundPattern addObject:[[GridPositionModel alloc] initWithColumnIndex:i rowIndex:j]];
-            } else {
-                // minimum pattern length
-                if ([foundPattern count] >= 3) {
-                    NSLog(@"found pattern");
-                    // save pattern.
-                    [foundPatterns addObject:foundPattern.copy];
-                }
-                
-                // reset search.
-//                NSLog(@"reset search");
-                [foundPattern removeAllObjects];
-                currentColorId = item.colorId;
-                [foundPattern addObject:[[GridPositionModel alloc] initWithColumnIndex:i rowIndex:j]];
-//                NSLog(@"new color:  %d", currentColorId);
-            }
-        }
-        
-        if ([foundPattern count] >= 3) {
-            NSLog(@"found pattern");
-            // save pattern.
-            [foundPatterns addObject:foundPattern.copy];
-        }
-        
-        // reset search.
-//        NSLog(@"reset search");
-        [foundPattern removeAllObjects];
-        currentColorId = -1;
-        
-        NSLog(@"-=-=-=-=-=-=-=-");
-        NSLog(@"END OF COLUMN");
-        NSLog(@"-=-=-=-=-=-=-=-");
+    for (NSArray *floep in self.matches) {
+        NSLog(@"%lu", (unsigned long)[floep count]);
     }
 }
 
-- (void)gameRuleLeftToRight {
-    DiamondView *item;
-    int currentColorId = -1;
-    NSMutableArray *foundPattern = [[NSMutableArray alloc] init];
-    NSMutableArray *foundPatterns = [[NSMutableArray alloc] init];
-    
-    // search pattern from top to bottom
-    for (int i = 0; i < self.gridController.numberOfRows; i++) {
-        NSLog(@"NEW ROW: %d", i);
-        NSLog(@"-=-=-=-=-=-=-=-");
-        
-        for (int j = 0; j < self.gridController.numberOfColumns; j++) {
-            NSLog(@"COLUMN INDEX %d", j);
-            item = [self.gridController itemAtPosition:[[GridPositionModel alloc] initWithColumnIndex:j rowIndex:i]];
-            
-            if (item.colorId == currentColorId) {
-//                NSLog(@"match: %d, %d", item.colorId, currentColorId);
-                [foundPattern addObject:[[GridPositionModel alloc] initWithColumnIndex:i rowIndex:j]];
-            } else {
-                // minimum pattern length
-                if ([foundPattern count] >= 3) {
-                    NSLog(@"found pattern");
-                    // save pattern.
-                    [foundPatterns addObject:foundPattern.copy];
-                }
-                
-                // reset search.
-//                NSLog(@"reset search");
-                [foundPattern removeAllObjects];
-                currentColorId = item.colorId;
-                [foundPattern addObject:[[GridPositionModel alloc] initWithColumnIndex:i rowIndex:j]];
-//                NSLog(@"new color:  %d", currentColorId);
-            }
+- (void)removeMatchesFromGrid {
+    for (NSArray *match in self.matches) {
+        for (GridPositionModel *position in match) {
+            DiamondView *item = [self.gridController itemAtPosition:position];
+            [item removeFromSuperview];
+            [self.gridController removeItemAtPosition:position];
         }
-        
-        if ([foundPattern count] >= 3) {
-            NSLog(@"found pattern");
-            // save pattern.
-            [foundPatterns addObject:foundPattern.copy];
-        }
-        
-        // reset search.
-//        NSLog(@"reset search");
-        [foundPattern removeAllObjects];
-        currentColorId = -1;
-        
-        NSLog(@"-=-=-=-=-=-=-=-");
-        NSLog(@"END OF COLUMN");
-        NSLog(@"-=-=-=-=-=-=-=-");
     }
+}
+
+- (void)updateUI {
+    [self drawGrid];
 }
 
 #pragma mark Getters

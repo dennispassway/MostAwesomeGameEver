@@ -33,6 +33,11 @@
     }
 }
 
+- (void)removeItemAtPosition:(GridPositionModel *)position {
+    NSObject *placeholder = [[NSObject alloc] init];
+    [self addItem:placeholder column:position.columnIndex row:position.rowIndex];
+}
+
 - (GridPositionModel *)itemPosition:(id)item {
     for (int i = 0; i < self.numberOfColumns; i++) {
         for (int j = 0; j < self.numberOfRows; j++) {
@@ -66,7 +71,7 @@
     }
 }
 
-#pragma mark Getters
+#pragma mark Properties
 
 - (NSMutableArray *)grid {
     if (!_grid) {

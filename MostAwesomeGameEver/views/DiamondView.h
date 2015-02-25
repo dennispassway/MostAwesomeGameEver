@@ -10,6 +10,8 @@
 
 @interface DiamondView : UIView
 
+#pragma mark Properties
+
 @property (nonatomic) int colorId;
 @property (nonatomic) float size;
 

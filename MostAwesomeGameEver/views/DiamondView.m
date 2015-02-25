@@ -22,6 +22,7 @@
         self.backgroundColor = [self color];
         self.bounds = CGRectInset(diamondFrame, self.size / 4, self.size / 4);
         self.layer.cornerRadius = self.size;
+        self.colorId = arc4random() % 4;
     }
     
     return self;
@@ -42,15 +43,7 @@
     }
 }
 
-#pragma mark Getters
-
-- (int) colorId {
-    if (!_colorId) {
-        _colorId = arc4random() % 4;
-    }
-    
-    return _colorId;
-}
+#pragma mark Properties
 
 - (float)size {
     if (!_size) {

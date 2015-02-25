@@ -11,6 +11,8 @@
 
 @interface Colors : NSObject
 
+#pragma mark Class methods
+
 + (UIColor *)grey;
 + (UIColor *)hotPink;
 + (UIColor *)nightBlue;
