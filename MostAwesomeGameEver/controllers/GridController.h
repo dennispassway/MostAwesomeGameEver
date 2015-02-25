@@ -24,11 +24,10 @@
 
 # pragma mark Items
 
-@property (strong, nonatomic) NSMutableArray *items;
-
-- (void)addItem:(id)item column:(int)columnPosition row:(int)rowPosition;
+- (void)addItem:(id)item atPosition:(GridPositionModel *)position;
 - (void)removeItemAtPosition:(GridPositionModel *)position;
 - (GridPositionModel *)itemPosition:(id)item;
 - (id)itemAtPosition:(GridPositionModel *)position;
+- (NSArray *)getItems;
 
 @end

@@ -25,17 +25,17 @@
 
 #pragma mark Public
 
-- (void)addItem:(id)item column:(int)columnPosition row:(int)rowPosition {
-    if (![self.items containsObject:item]) {
-        NSMutableArray *row = [self.grid objectAtIndex:columnPosition];
-        [row replaceObjectAtIndex:rowPosition withObject:item];
-        [self.items addObject:item];
+- (void)addItem:(id)item atPosition:(GridPositionModel *)position {
+    if (![self containsItem:item]) {
+        NSMutableArray *row = [self.grid objectAtIndex:position.columnIndex];
+        [row replaceObjectAtIndex:position.rowIndex withObject:item];
     }
 }
 
 - (void)removeItemAtPosition:(GridPositionModel *)position {
+    // replace item in 2d array
     NSObject *placeholder = [[NSObject alloc] init];
-    [self addItem:placeholder column:position.columnIndex row:position.rowIndex];
+    [self addItem:placeholder atPosition:position];
 }
 
 - (GridPositionModel *)itemPosition:(id)item {
@@ -53,6 +53,32 @@
 
 - (id)itemAtPosition:(GridPositionModel *)position {
     return [[self.grid objectAtIndex:position.columnIndex] objectAtIndex:position.rowIndex];
+}
+
+- (BOOL)containsItem:(id)item {
+    for (int i = 0; i < self.numberOfColumns; i++) {
+        for (int j = 0; j < self.numberOfRows; j++) {
+            id itemAtIndex = [[self.grid objectAtIndex:i] objectAtIndex:j];
+            if ([itemAtIndex isEqual:item]) {
+                return YES;
+            }
+        }
+    }
+    
+    return NO;
+}
+
+- (NSArray *)getItems {
+    NSMutableArray *items = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < self.numberOfColumns; i++) {
+        for (int j = 0; j < self.numberOfRows; j++) {
+            id itemAtIndex = [[self.grid objectAtIndex:i] objectAtIndex:j];
+            [items addObject:itemAtIndex];
+        }
+    }
+    
+    return items;
 }
 
 #pragma mark Private
@@ -78,14 +104,6 @@
         [self createGrid];
     }
     return _grid;
-}
-
-- (NSMutableArray *)items {
-    if (!_items) {
-        _items = [[NSMutableArray alloc] init];
-    }
-    
-    return _items;
 }
 
 @end

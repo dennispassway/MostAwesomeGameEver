@@ -28,8 +28,10 @@
     [self randomFillGrid];
     [self drawGrid];
     [self applyGameRules];
-    [self removeMatchesFromGrid];
-    [self updateUI];
+    [self removeMatchesFromGame];
+    [self refillGrid];
+    
+    [self drawGrid];
 }
 
 #pragma mark Private methods
@@ -38,13 +40,13 @@
     for (int i = 0; i < self.gridController.numberOfColumns; i++) {
         for (int j = 0; j < self.gridController.numberOfRows; j++) {
             DiamondView *diamondView = [[DiamondView alloc] init];
-            [self.gridController addItem:diamondView column:i row:j];
+            [self.gridController addItem:diamondView atPosition:[[GridPositionModel alloc] initWithColumnIndex:i rowIndex:j]];
         }
     }
 }
 
 - (void)drawGrid {
-    NSArray *items = self.gridController.items;
+    NSArray *items = [self.gridController getItems];
     CGFloat gameViewWidth = CGRectGetWidth(self.gameView.frame);
     
     for (DiamondView *item in items) {
@@ -65,23 +67,45 @@
     GRLinearMatch *linearMatchRule = [[GRLinearMatch alloc] init];
     self.matches = [linearMatchRule applyWithGrid:self.gridController];
     
-    for (NSArray *floep in self.matches) {
-        NSLog(@"%lu", (unsigned long)[floep count]);
+    NSLog(@"total matches: %lu", (unsigned long)[self.matches count]);
+    
+    for (NSArray *match in self.matches) {
+        NSLog(@"match length: %lu", (unsigned long)[match count]);
     }
 }
 
-- (void)removeMatchesFromGrid {
+- (void)removeMatchesFromGame {
     for (NSArray *match in self.matches) {
         for (GridPositionModel *position in match) {
-            DiamondView *item = [self.gridController itemAtPosition:position];
-            [item removeFromSuperview];
-            [self.gridController removeItemAtPosition:position];
+            // get basic item. it can be diamondview or placeholder
+            id item = [self.gridController itemAtPosition:position];
+            
+            // check if it is the correct type Diamondview
+            if ([item isKindOfClass:[DiamondView class]]) {
+                // remove view from superview
+                [item removeFromSuperview];
+                // remove id from grid
+                [self.gridController removeItemAtPosition:position];
+            }
         }
     }
 }
 
-- (void)updateUI {
-    [self drawGrid];
+- (void)refillGrid {
+    GridPositionModel *position;
+    id item;
+    DiamondView *view;
+    
+    for (int i = 0; i < self.gridController.numberOfColumns; i++) {
+        for (int j = 0; j < self.gridController.numberOfRows; j++) {
+            position = [[GridPositionModel alloc] initWithColumnIndex:i rowIndex:j];
+            item = [self.gridController itemAtPosition:position];
+            if (![item isKindOfClass:[DiamondView class]]) {
+                view = [[DiamondView alloc] init];
+                [self.gridController addItem:view atPosition:position];
+            }
+        }
+    }
 }
 
 #pragma mark Getters
