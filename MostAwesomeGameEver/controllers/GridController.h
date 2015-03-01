@@ -26,8 +26,8 @@
 
 - (void)addItem:(id)item atPosition:(GridPositionModel *)position;
 - (void)removeItemAtPosition:(GridPositionModel *)position;
-- (GridPositionModel *)itemPosition:(id)item;
+- (GridPositionModel *)positionOfItem:(id)item;
 - (id)itemAtPosition:(GridPositionModel *)position;
-- (NSArray *)getItems;
+- (NSArray *)items;
 
 @end

@@ -79,8 +79,10 @@
     }
 }
 
+static int const amountToMatch = 3;
+
 - (void)checkAmountOfMatches {
-    if ([self.match count] >= 3) {
+    if ([self.match count] >= amountToMatch) {
         [self.matches addObject:self.match.copy];
     }
 }

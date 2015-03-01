@@ -23,7 +23,7 @@
     return self;
 }
 
-#pragma mark Public
+#pragma mark Public Methods
 
 - (void)addItem:(id)item atPosition:(GridPositionModel *)position {
     if (![self containsItem:item]) {
@@ -33,17 +33,16 @@
 }
 
 - (void)removeItemAtPosition:(GridPositionModel *)position {
-    // replace item in 2d array
     NSObject *placeholder = [[NSObject alloc] init];
     [self addItem:placeholder atPosition:position];
 }
 
-- (GridPositionModel *)itemPosition:(id)item {
-    for (int i = 0; i < self.numberOfColumns; i++) {
-        for (int j = 0; j < self.numberOfRows; j++) {
-            id itemAtIndex = [[self.grid objectAtIndex:i] objectAtIndex:j];
+- (GridPositionModel *)positionOfItem:(id)item {
+    for (int columnIndex = 0; columnIndex < self.numberOfColumns; columnIndex++) {
+        for (int rowIndex = 0; rowIndex < self.numberOfRows; rowIndex++) {
+            id itemAtIndex = [[self.grid objectAtIndex:columnIndex] objectAtIndex:rowIndex];
             if ([itemAtIndex isEqual:item]) {
-                return [[GridPositionModel alloc] initWithColumnIndex:i rowIndex:j];
+                return [[GridPositionModel alloc] initWithColumnIndex:columnIndex rowIndex:rowIndex];
             }
         }
     }
@@ -56,9 +55,9 @@
 }
 
 - (BOOL)containsItem:(id)item {
-    for (int i = 0; i < self.numberOfColumns; i++) {
-        for (int j = 0; j < self.numberOfRows; j++) {
-            id itemAtIndex = [[self.grid objectAtIndex:i] objectAtIndex:j];
+    for (int columnIndex = 0; columnIndex < self.numberOfColumns; columnIndex++) {
+        for (int rowIndex = 0; rowIndex < self.numberOfRows; rowIndex++) {
+            id itemAtIndex = [[self.grid objectAtIndex:columnIndex] objectAtIndex:rowIndex];
             if ([itemAtIndex isEqual:item]) {
                 return YES;
             }
@@ -68,12 +67,12 @@
     return NO;
 }
 
-- (NSArray *)getItems {
+- (NSArray *)items {
     NSMutableArray *items = [[NSMutableArray alloc] init];
     
-    for (int i = 0; i < self.numberOfColumns; i++) {
-        for (int j = 0; j < self.numberOfRows; j++) {
-            id itemAtIndex = [[self.grid objectAtIndex:i] objectAtIndex:j];
+    for (int columnIndex = 0; columnIndex < self.numberOfColumns; columnIndex++) {
+        for (int rowIndex = 0; rowIndex < self.numberOfRows; rowIndex++) {
+            id itemAtIndex = [[self.grid objectAtIndex:columnIndex] objectAtIndex:rowIndex];
             [items addObject:itemAtIndex];
         }
     }
@@ -81,16 +80,16 @@
     return items;
 }
 
-#pragma mark Private
+#pragma mark Private Methods
 
 - (void)createGrid {
     self.grid = [[NSMutableArray alloc] init];
     
-    for (int i = 0; i < self.numberOfColumns; i++) {
+    for (int columnIndex = 0; columnIndex < self.numberOfColumns; columnIndex++) {
         NSMutableArray *column = [[NSMutableArray alloc] init];
         [self.grid addObject:column];
         
-        for (int j = 0; j < self.numberOfRows; j++) {
+        for (int rowIndex = 0; rowIndex < self.numberOfRows; rowIndex++) {
             NSMutableArray *row = [[NSMutableArray alloc] init];
             [column addObject:row];
         }

@@ -15,4 +15,6 @@
 @property (nonatomic) int colorId;
 @property (nonatomic) float size;
 
++ (void)setDiamondViewSize:(float)size;
+
 @end

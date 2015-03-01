@@ -28,6 +28,13 @@
     return self;
 }
 
+#pragma mark Public Class methods
+
+static float diamondViewSize;
++ (void)setDiamondViewSize:(float)size {
+    diamondViewSize = size;
+}
+
 #pragma mark Private methods
 
 - (UIColor *)color {
@@ -47,7 +54,11 @@
 
 - (float)size {
     if (!_size) {
-        _size = 100.0;
+        if (diamondViewSize) {
+            _size = diamondViewSize;
+        } else {
+            _size = 100.0;
+        }
     }
     
     return _size;

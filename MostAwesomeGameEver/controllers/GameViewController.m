@@ -21,49 +21,64 @@
 
 @implementation GameViewController
 
+static int const numberOfHorizontalItems = 4;
+
+
+
 #pragma mark Lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self setup];
+    
     [self randomFillGrid];
-    [self start];
+    [self startGame];
 }
 
 #pragma mark Private methods
 
-- (void)start {
+- (void)setup {
+    float itemSize = CGRectGetWidth(self.gameView.frame) / numberOfHorizontalItems;
+    [DiamondView setDiamondViewSize:itemSize];
+}
+
+- (void)startGame {
     [self drawGrid];
     [self applyGameRules];
     
     if (self.isChanged) {
         [self removeMatchesFromGame];
-        [self refillGrid];
+        [self refillGridWithDiamonds];
     }
 }
 
 - (void)randomFillGrid {
-    for (int i = 0; i < self.gridController.numberOfColumns; i++) {
-        for (int j = 0; j < self.gridController.numberOfRows; j++) {
+    for (int columnIndex = 0; columnIndex < self.gridController.numberOfColumns; columnIndex++) {
+        for (int rowIndex = 0; rowIndex < self.gridController.numberOfRows; rowIndex++) {
             DiamondView *diamondView = [[DiamondView alloc] init];
-            [self.gridController addItem:diamondView atPosition:[[GridPositionModel alloc] initWithColumnIndex:i rowIndex:j]];
+            [self.gridController addItem:diamondView atPosition:[[GridPositionModel alloc] initWithColumnIndex:columnIndex rowIndex:rowIndex]];
         }
     }
 }
 
 - (void)drawGrid {
-    NSArray *items = [self.gridController getItems];
+    NSArray *items = [self.gridController items];
     CGFloat gameViewWidth = CGRectGetWidth(self.gameView.frame);
     
     for (DiamondView *item in items) {
-        GridPositionModel *position = [self.gridController itemPosition:item];
+        GridPositionModel *position = [self.gridController positionOfItem:item];
         
-        CGRect frame = item.frame;
-        frame.size.width = gameViewWidth / 4;
-        frame.size.height = gameViewWidth / 4;
-        frame.origin.x = (position.columnIndex * item.size);
-        frame.origin.y = (position.rowIndex * item.size);
-        item.frame = frame;
+        float inset = 8.0;
+        int itemSize = gameViewWidth / numberOfHorizontalItems;
+        
+        CGRect itemFrame = item.frame;
+        itemFrame.size.width = itemSize;
+        itemFrame.size.height = itemSize;
+        itemFrame.origin.x = (position.columnIndex * item.size) + (item.size / 4);
+        itemFrame.origin.y = (position.rowIndex * item.size) + (item.size / 4);
+        item.frame = itemFrame;
+        item.bounds = CGRectInset(item.frame, inset, inset);
         
         [self.view addSubview:item];
     }
@@ -84,38 +99,34 @@
 
 - (void)removeMatchesFromGame {
     for (NSArray *match in self.matches) {
-        for (GridPositionModel *position in match) {
-            // get basic item. it can be diamondview or placeholder
-            id item = [self.gridController itemAtPosition:position];
+        for (GridPositionModel *positionOfItem in match) {
+            id item = [self.gridController itemAtPosition:positionOfItem];
             
-            // check if it is the correct type Diamondview
             if ([item isKindOfClass:[DiamondView class]]) {
-                // remove view from superview
                 [item removeFromSuperview];
-                // remove id from grid
-                [self.gridController removeItemAtPosition:position];
+                [self.gridController removeItemAtPosition:positionOfItem];
             }
         }
     }
 }
 
-- (void)refillGrid {
+- (void)refillGridWithDiamonds {
     GridPositionModel *position;
     id item;
-    DiamondView *view;
+    DiamondView *diamondView;
     
-    for (int i = 0; i < self.gridController.numberOfColumns; i++) {
-        for (int j = 0; j < self.gridController.numberOfRows; j++) {
-            position = [[GridPositionModel alloc] initWithColumnIndex:i rowIndex:j];
+    for (int columnIndex = 0; columnIndex < self.gridController.numberOfColumns; columnIndex++) {
+        for (int rowIndex = 0; rowIndex < self.gridController.numberOfRows; rowIndex++) {
+            position = [[GridPositionModel alloc] initWithColumnIndex:columnIndex rowIndex:rowIndex];
             item = [self.gridController itemAtPosition:position];
             if (![item isKindOfClass:[DiamondView class]]) {
-                view = [[DiamondView alloc] init];
-                [self.gridController addItem:view atPosition:position];
+                diamondView = [[DiamondView alloc] init];
+                [self.gridController addItem:diamondView atPosition:position];
             }
         }
     }
     
-    [self start];
+    [self startGame];
 }
 
 #pragma mark Getters
@@ -125,8 +136,10 @@
         CGFloat gameViewWidth = CGRectGetWidth(self.gameView.frame);
         CGFloat gameViewHeight = CGRectGetHeight(self.gameView.frame);
         
-        int columns = gameViewWidth / (gameViewWidth / 4);
-        int rows = gameViewHeight / (gameViewWidth / 4);
+        int itemSize = (gameViewWidth / numberOfHorizontalItems);
+        
+        int columns = gameViewWidth / itemSize;
+        int rows = gameViewHeight / itemSize;
         _gridController = [[GridController alloc] initWithColumns:columns rows:rows];
     }
     
