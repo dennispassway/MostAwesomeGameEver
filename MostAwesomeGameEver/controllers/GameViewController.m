@@ -23,8 +23,6 @@
 
 static int const numberOfHorizontalItems = 4;
 
-
-
 #pragma mark Lifecycle
 
 - (void)viewDidLoad {
@@ -49,7 +47,6 @@ static int const numberOfHorizontalItems = 4;
     
     if (self.isChanged) {
         [self removeMatchesFromGame];
-        [self refillGridWithDiamonds];
     }
 }
 
@@ -98,16 +95,31 @@ static int const numberOfHorizontalItems = 4;
 }
 
 - (void)removeMatchesFromGame {
-    for (NSArray *match in self.matches) {
-        for (GridPositionModel *positionOfItem in match) {
-            id item = [self.gridController itemAtPosition:positionOfItem];
-            
-            if ([item isKindOfClass:[DiamondView class]]) {
-                [item removeFromSuperview];
-                [self.gridController removeItemAtPosition:positionOfItem];
+    [UIView animateWithDuration:1 animations:^(void) {
+        for (NSArray *match in self.matches) {
+            for (GridPositionModel *positionOfItem in match) {
+                id item = [self.gridController itemAtPosition:positionOfItem];
+                
+                if ([item isKindOfClass:[DiamondView class]]) {
+                    DiamondView *view = (DiamondView *)item;
+                    view.alpha = 0;
+                }
             }
         }
-    }
+    } completion:^(BOOL finished) {
+        for (NSArray *match in self.matches) {
+            for (GridPositionModel *positionOfItem in match) {
+                id item = [self.gridController itemAtPosition:positionOfItem];
+                
+                if ([item isKindOfClass:[DiamondView class]]) {
+                    [item removeFromSuperview];
+                    [self.gridController removeItemAtPosition:positionOfItem];
+                }
+            }
+        }
+        
+        [self refillGridWithDiamonds];
+    }];
 }
 
 - (void)refillGridWithDiamonds {

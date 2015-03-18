@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		261266411A92771400EE3615 /* GridPositionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 261266401A92771400EE3615 /* GridPositionModel.m */; };
 		266DE1171A9E345600FFBF31 /* GRLinearMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 266DE1161A9E345600FFBF31 /* GRLinearMatch.m */; };
+		2685BFA61AB99C3C00655D0D /* AnimationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2685BFA51AB99C3C00655D0D /* AnimationController.m */; };
 		26E8453F1A92550300A0D57D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 26E8453E1A92550300A0D57D /* main.m */; };
 		26E845421A92550300A0D57D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 26E845411A92550300A0D57D /* AppDelegate.m */; };
 		26E845451A92550300A0D57D /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26E845441A92550300A0D57D /* GameViewController.m */; };
@@ -36,6 +37,8 @@
 		261266401A92771400EE3615 /* GridPositionModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GridPositionModel.m; path = models/GridPositionModel.m; sourceTree = "<group>"; };
 		266DE1151A9E345600FFBF31 /* GRLinearMatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GRLinearMatch.h; path = models/rules/GRLinearMatch.h; sourceTree = "<group>"; };
 		266DE1161A9E345600FFBF31 /* GRLinearMatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GRLinearMatch.m; path = models/rules/GRLinearMatch.m; sourceTree = "<group>"; };
+		2685BFA41AB99C3C00655D0D /* AnimationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnimationController.h; path = controllers/AnimationController.h; sourceTree = "<group>"; };
+		2685BFA51AB99C3C00655D0D /* AnimationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnimationController.m; path = controllers/AnimationController.m; sourceTree = "<group>"; };
 		26E845391A92550300A0D57D /* MostAwesomeGameEver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MostAwesomeGameEver.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		26E8453D1A92550300A0D57D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		26E8453E1A92550300A0D57D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -163,6 +166,8 @@
 				26E8456F1A9259D700A0D57D /* GridController.m */,
 				26E845431A92550300A0D57D /* GameViewController.h */,
 				26E845441A92550300A0D57D /* GameViewController.m */,
+				2685BFA41AB99C3C00655D0D /* AnimationController.h */,
+				2685BFA51AB99C3C00655D0D /* AnimationController.m */,
 			);
 			name = controllers;
 			sourceTree = "<group>";
@@ -299,6 +304,7 @@
 				26E8453F1A92550300A0D57D /* main.m in Sources */,
 				26E8456A1A92582400A0D57D /* DiamondView.m in Sources */,
 				261266411A92771400EE3615 /* GridPositionModel.m in Sources */,
+				2685BFA61AB99C3C00655D0D /* AnimationController.m in Sources */,
 				26E845701A9259D700A0D57D /* GridController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
