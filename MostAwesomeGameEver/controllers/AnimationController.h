@@ -6,8 +6,10 @@
 //  Copyright (c) 2015 VOF JD BV. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface AnimationController : NSObject
+
++ (void)fadeOut:(UIView *)view onComplete:(void (^)(BOOL finished))block;
 
 @end

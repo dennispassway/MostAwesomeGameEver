@@ -79,7 +79,7 @@
     }
 }
 
-static int const amountToMatch = 3;
+static int const amountToMatch = 2;
 
 - (void)checkAmountOfMatches {
     if ([self.match count] >= amountToMatch) {

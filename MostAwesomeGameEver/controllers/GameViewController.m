@@ -10,6 +10,7 @@
 #import "GridPositionModel.h"
 #import "DiamondView.h"
 #import "GRLinearMatch.h"
+#import "AnimationController.h"
 
 @interface GameViewController()
 
@@ -95,31 +96,33 @@ static int const numberOfHorizontalItems = 4;
 }
 
 - (void)removeMatchesFromGame {
-    [UIView animateWithDuration:1 animations:^(void) {
-        for (NSArray *match in self.matches) {
-            for (GridPositionModel *positionOfItem in match) {
-                id item = [self.gridController itemAtPosition:positionOfItem];
+    
+    for (NSArray *match in self.matches) {
+        for (GridPositionModel *positionOfItem in match) {
+            id item = [self.gridController itemAtPosition:positionOfItem];
+            
+            NSLog(@"item: %@", item);
+            
+                [item removeFromSuperview];
+                [self.gridController removeItemAtPosition:positionOfItem];
                 
-                if ([item isKindOfClass:[DiamondView class]]) {
-                    DiamondView *view = (DiamondView *)item;
-                    view.alpha = 0;
-                }
-            }
-        }
-    } completion:^(BOOL finished) {
-        for (NSArray *match in self.matches) {
-            for (GridPositionModel *positionOfItem in match) {
-                id item = [self.gridController itemAtPosition:positionOfItem];
-                
-                if ([item isKindOfClass:[DiamondView class]]) {
+                [AnimationController fadeOut:(DiamondView *)item onComplete:^(BOOL finished) {
                     [item removeFromSuperview];
                     [self.gridController removeItemAtPosition:positionOfItem];
-                }
-            }
+                    
+                    NSLog(@"%lu, %lu", (unsigned long)[self.matches indexOfObject:match], (unsigned long)self.matches.count);
+
+                    if ([self.matches indexOfObject:match] == self.matches.count - 1) {
+                        if ([match indexOfObject:positionOfItem] == match.count - 1) {
+                            [self refillGridWithDiamonds];
+                        }
+                    }
+                    
+                }];
+            
+            [self refillGridWithDiamonds];
         }
-        
-        [self refillGridWithDiamonds];
-    }];
+    }
 }
 
 - (void)refillGridWithDiamonds {

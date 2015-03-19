@@ -10,34 +10,11 @@
 
 @implementation AnimationController
 
-- (void)floepie {
++ (void)fadeOut:(UIView *)view onComplete:(void (^)(BOOL finished))block {
     
-    [UIView animateWithDuration:1 animations:^(void) {
-        for (NSArray *match in self.matches) {
-            for (GridPositionModel *positionOfItem in match) {
-                id item = [self.gridController itemAtPosition:positionOfItem];
-                
-                if ([item isKindOfClass:[DiamondView class]]) {
-                    DiamondView *view = (DiamondView *)item;
-                    view.alpha = 0;
-                }
-            }
-        }
-    } completion:^(BOOL finished) {
-        for (NSArray *match in self.matches) {
-            for (GridPositionModel *positionOfItem in match) {
-                id item = [self.gridController itemAtPosition:positionOfItem];
-                
-                if ([item isKindOfClass:[DiamondView class]]) {
-                    [item removeFromSuperview];
-                    [self.gridController removeItemAtPosition:positionOfItem];
-                }
-            }
-        }
-        
-        [self refillGridWithDiamonds];
-    }];
-
+    [UIView animateWithDuration:0.5 animations:^(void){
+        view.alpha = 0;
+    } completion:block];
     
 }
 
