@@ -30,7 +30,6 @@ static int const numberOfHorizontalItems = 4;
     [super viewDidLoad];
     
     [self setup];
-    
     [self randomFillGrid];
     [self startGame];
 }
@@ -42,15 +41,6 @@ static int const numberOfHorizontalItems = 4;
     [DiamondView setDiamondViewSize:itemSize];
 }
 
-- (void)startGame {
-    [self drawGrid];
-    [self applyGameRules];
-    
-    if (self.isChanged) {
-        [self removeMatchesFromGame];
-    }
-}
-
 - (void)randomFillGrid {
     for (int columnIndex = 0; columnIndex < self.gridController.numberOfColumns; columnIndex++) {
         for (int rowIndex = 0; rowIndex < self.gridController.numberOfRows; rowIndex++) {
@@ -60,26 +50,37 @@ static int const numberOfHorizontalItems = 4;
     }
 }
 
-- (void)drawGrid {
-    NSArray *items = [self.gridController items];
-    CGFloat gameViewWidth = CGRectGetWidth(self.gameView.frame);
+- (void)startGame {
+    [self drawGrid];
+    [self applyGameRules];
     
-    for (DiamondView *item in items) {
+    if (self.isChanged) {
+        [self removeMatchesFromGame];
+    }
+}
+
+- (void)drawGrid {
+    for (DiamondView *item in [self.gridController items]) {
         GridPositionModel *position = [self.gridController positionOfItem:item];
         
-        float inset = 8.0;
-        int itemSize = gameViewWidth / numberOfHorizontalItems;
-        
-        CGRect itemFrame = item.frame;
-        itemFrame.size.width = itemSize;
-        itemFrame.size.height = itemSize;
-        itemFrame.origin.x = (position.columnIndex * item.size) + (item.size / 4);
-        itemFrame.origin.y = (position.rowIndex * item.size) + (item.size / 4);
-        item.frame = itemFrame;
-        item.bounds = CGRectInset(item.frame, inset, inset);
+        [self drawItem:item atPosition:position];
         
         [self.view addSubview:item];
     }
+}
+
+- (void)drawItem:(DiamondView *)item atPosition:(GridPositionModel *)position {
+    CGFloat gameViewWidth = CGRectGetWidth(self.gameView.frame);
+    float inset = 8.0;
+    int itemSize = gameViewWidth / numberOfHorizontalItems;
+    
+    CGRect itemFrame = item.frame;
+    itemFrame.size.width = itemSize;
+    itemFrame.size.height = itemSize;
+    itemFrame.origin.x = (position.columnIndex * item.size) + (item.size / 4);
+    itemFrame.origin.y = (position.rowIndex * item.size) + (item.size / 4);
+    item.frame = itemFrame;
+    item.bounds = CGRectInset(item.frame, inset, inset);
 }
 
 - (void)applyGameRules {
@@ -97,45 +98,38 @@ static int const numberOfHorizontalItems = 4;
 
 - (void)removeMatchesFromGame {
     
+    NSLog(@"REMOVE!");
+    
     for (NSArray *match in self.matches) {
         for (GridPositionModel *positionOfItem in match) {
-            id item = [self.gridController itemAtPosition:positionOfItem];
+            DiamondView *item = [self.gridController itemAtPosition:positionOfItem];
+            item.alpha = 1;
+            item.transform = CGAffineTransformMakeScale(1, 1);
             
-            NSLog(@"item: %@", item);
-            
+            [UIView animateWithDuration:1 animations:^{
+                item.transform = CGAffineTransformMakeScale(4, 4);
+                item.alpha = 0;
+            } completion:^(BOOL finished) {
                 [item removeFromSuperview];
                 [self.gridController removeItemAtPosition:positionOfItem];
                 
-                [AnimationController fadeOut:(DiamondView *)item onComplete:^(BOOL finished) {
-                    [item removeFromSuperview];
-                    [self.gridController removeItemAtPosition:positionOfItem];
-                    
-                    NSLog(@"%lu, %lu", (unsigned long)[self.matches indexOfObject:match], (unsigned long)self.matches.count);
-
-                    if ([self.matches indexOfObject:match] == self.matches.count - 1) {
-                        if ([match indexOfObject:positionOfItem] == match.count - 1) {
-                            [self refillGridWithDiamonds];
-                        }
+                if ([self.matches indexOfObject:match] == self.matches.count - 1) {
+                    if ([match indexOfObject:positionOfItem] == match.count - 1) {
+                        [self refillGridWithDiamonds];
                     }
-                    
-                }];
-            
-            [self refillGridWithDiamonds];
+                }
+            }];
         }
     }
 }
 
 - (void)refillGridWithDiamonds {
-    GridPositionModel *position;
-    id item;
-    DiamondView *diamondView;
-    
     for (int columnIndex = 0; columnIndex < self.gridController.numberOfColumns; columnIndex++) {
         for (int rowIndex = 0; rowIndex < self.gridController.numberOfRows; rowIndex++) {
-            position = [[GridPositionModel alloc] initWithColumnIndex:columnIndex rowIndex:rowIndex];
-            item = [self.gridController itemAtPosition:position];
+            GridPositionModel *position = [[GridPositionModel alloc] initWithColumnIndex:columnIndex rowIndex:rowIndex];
+            id item = [self.gridController itemAtPosition:position];
             if (![item isKindOfClass:[DiamondView class]]) {
-                diamondView = [[DiamondView alloc] init];
+                DiamondView *diamondView = [[DiamondView alloc] init];
                 [self.gridController addItem:diamondView atPosition:position];
             }
         }

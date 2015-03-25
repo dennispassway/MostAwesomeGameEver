@@ -12,7 +12,7 @@
 
 + (void)fadeOut:(UIView *)view onComplete:(void (^)(BOOL finished))block {
     
-    [UIView animateWithDuration:0.5 animations:^(void){
+    [UIView animateWithDuration:5 animations:^(void){
         view.alpha = 0;
     } completion:block];
     

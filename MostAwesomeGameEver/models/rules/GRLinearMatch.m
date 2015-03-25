@@ -23,6 +23,8 @@
 
 @implementation GRLinearMatch
 
+static int const amountToMatch = 3;
+
 #pragma mark Public methods
 
 - (NSArray *)applyWithGrid:(GridController *)grid {
@@ -78,8 +80,6 @@
         [self.match addObject:[[GridPositionModel alloc] initWithColumnIndex:columnIndex rowIndex:rowIndex]];
     }
 }
-
-static int const amountToMatch = 2;
 
 - (void)checkAmountOfMatches {
     if ([self.match count] >= amountToMatch) {
