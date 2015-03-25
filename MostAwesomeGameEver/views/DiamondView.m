@@ -19,6 +19,7 @@
     self = [super initWithFrame:diamondFrame];
     
     if (self) {
+        self.alpha = 1;
         self.colorId = arc4random() % 4;
         self.backgroundColor = [self color];
         self.bounds = CGRectInset(diamondFrame, self.size / 4, self.size / 4);

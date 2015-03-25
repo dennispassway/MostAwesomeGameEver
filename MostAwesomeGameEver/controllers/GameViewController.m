@@ -86,27 +86,20 @@ static int const numberOfHorizontalItems = 4;
 - (void)applyGameRules {
     GRLinearMatch *linearMatchRule = [[GRLinearMatch alloc] init];
     self.matches = [linearMatchRule applyWithGrid:self.gridController];
-    
-    NSLog(@"total matches: %lu", (unsigned long)[self.matches count]);
-    
-    for (NSArray *match in self.matches) {
-        NSLog(@"match length: %lu", (unsigned long)[match count]);
-    }
-    
     self.isChanged = [self.matches count] > 0;
 }
 
 - (void)removeMatchesFromGame {
-    
-    NSLog(@"REMOVE!");
+    float delay = 0;
+    float duration = 0.3;
     
     for (NSArray *match in self.matches) {
         for (GridPositionModel *positionOfItem in match) {
             DiamondView *item = [self.gridController itemAtPosition:positionOfItem];
-            item.alpha = 1;
-            item.transform = CGAffineTransformMakeScale(1, 1);
+
+            delay = 0.3 + delay;
             
-            [UIView animateWithDuration:1 animations:^{
+            [UIView animateWithDuration:duration delay:delay options:nil animations:^{
                 item.transform = CGAffineTransformMakeScale(4, 4);
                 item.alpha = 0;
             } completion:^(BOOL finished) {
@@ -146,9 +139,9 @@ static int const numberOfHorizontalItems = 4;
         CGFloat gameViewHeight = CGRectGetHeight(self.gameView.frame);
         
         int itemSize = (gameViewWidth / numberOfHorizontalItems);
-        
         int columns = gameViewWidth / itemSize;
         int rows = gameViewHeight / itemSize;
+        
         _gridController = [[GridController alloc] initWithColumns:columns rows:rows];
     }
     
